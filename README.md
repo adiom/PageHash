@@ -1,0 +1,1 @@
+# Canfly Amalgam PageHash
