@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@supabase/supabase-js": "^2.47.10",
+    "@tailwindcss/typography": "^0.5.15",
     "bootstrap": "^5.3.3",
     "marked": "^15.0.5",
     "md5": "^2.3.0",

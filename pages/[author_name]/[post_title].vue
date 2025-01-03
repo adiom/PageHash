@@ -39,7 +39,7 @@ onMounted(async () => {
     <div v-if="post">
       <h1 class="text-4xl font-semibold text-blue-600">{{ post.title }}</h1>
       <p class="text-2xl font-semibold text-blue-600 mb-4">{{ post.author }}</p>
-      <div v-html="post.content"></div> <!-- Отображаем преобразованный HTML -->
+      <div v-html="post.content" class="prose prose-blue mb-4"></div> <!-- Отображаем преобразованный HTML -->
     </div>
     <div v-else>
       <p>Loading...</p>
