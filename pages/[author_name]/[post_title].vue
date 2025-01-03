@@ -1,46 +1,48 @@
-<template>
-  <div v-if="post">
-    <h1>{{ post.title }}</h1>
-    <p><strong>Автор:</strong> {{ post.author }}</p>
-    <p>{{ post.content }}</p>
-  </div>
-  <div v-else>
-    <p>Запись не найдена.</p>
-  </div>
-</template>
-
 <script setup>
+import { marked } from 'marked' // Импортируем функцию из библиотеки
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { supabase } from '@/composables/useSupabase'
 
 const route = useRoute()
-
-// Реф для хранения поста
 const post = ref(null)
 
 onMounted(async () => {
   const { author_name, post_title } = route.params
 
   try {
-    // Выполняем запрос к базе данных на основе автора и заголовка
     const { data, error } = await supabase
       .from('posts')
       .select('*')
       .eq('author', author_name)
       .eq('title', post_title)
-      .single()  // Ожидаем только одну запись
+      .single()
 
     if (error) {
       throw error
     }
 
-    // Сохраняем пост в реф, если он найден
     if (data) {
-      post.value = data
+      post.value = {
+        ...data,
+        content: marked(data.content) // Преобразуем Markdown в HTML
+      }
     }
   } catch (error) {
     console.error('Error fetching post:', error.message)
   }
 })
 </script>
+
+<template>
+  <div class="container mx-auto p-8">
+    <div v-if="post">
+      <h1 class="text-4xl font-semibold text-blue-600">{{ post.title }}</h1>
+      <p class="text-2xl font-semibold text-blue-600 mb-4">{{ post.author }}</p>
+      <div v-html="post.content"></div> <!-- Отображаем преобразованный HTML -->
+    </div>
+    <div v-else>
+      <p>Loading...</p>
+    </div>
+  </div>
+</template>

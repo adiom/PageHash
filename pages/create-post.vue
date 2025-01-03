@@ -1,22 +1,51 @@
 <template>
-  <div>
-    <h1>Post create</h1>
-    <form @submit.prevent="savePost">
-      <div>
-        <label>Заголовок:</label>
-        <input v-model="title" placeholder="title post" />
-      </div>
-      <div>
-        <label>Автор:</label>
-        <input v-model="author" placeholder="Author name" />
-      </div>
-      <div>
-        <label>Текст:</label>
-        <textarea v-model="content" placeholder="Post Content"></textarea>
-      </div>
-      <button type="submit">Save post</button>
-    </form>
-  </div>
+    <!-- Форма добавления поста -->
+    <div class="max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg">
+      <h2 class="text-2xl font-semibold text-center text-blue-600 mb-4">Создать пост</h2>
+      <form @submit.prevent="savePost">
+        <div class="mb-4">
+          <label for="title" class="block text-sm font-medium text-gray-700">Заголовок</label>
+          <input
+            id="title"
+            v-model="title"
+            type="text"
+            class="w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="author" class="block text-sm font-medium text-gray-700">Автор</label>
+          <input
+            id="author"
+            v-model="author"
+            type="text"
+            class="w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="content" class="block text-sm font-medium text-gray-700">Контент</label>
+          <textarea
+            id="content"
+            v-model="content"
+            class="w-full p-2 border border-gray-300 rounded-md"
+            rows="5"
+            required
+          ></textarea>
+        </div>
+
+        <div class="text-center">
+          <button
+            type="submit"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Сохранить
+          </button>
+        </div>
+      </form>
+    </div>
 </template>
 
 <script setup>
