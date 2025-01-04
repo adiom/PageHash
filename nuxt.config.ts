@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     'bootstrap/dist/css/bootstrap.css',
     '@/assets/css/tailwind.css',
   ],
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt'
+  ],
   compatibilityDate: '2025-01-03'
 })

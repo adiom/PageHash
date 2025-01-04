@@ -3,8 +3,8 @@
     <h1>Вход</h1>
     <form @submit.prevent="handleLogin">
       <div>
-        <label for="email">Email:</label>
-        <input type="email" v-model="email" id="email" required />
+        <label for="author">Имя пользователя:</label>
+        <input type="text" v-model="author" id="author" required />
       </div>
       <div>
         <label for="password">Пароль:</label>
@@ -12,28 +12,26 @@
       </div>
       <button type="submit">Войти</button>
     </form>
+    <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
 
-<script>
-export default {
-  layout: 'auth', // Указываем использовать макет auth.vue
-  // Остальная часть компонента
-  data() {
-    return {
-      email: '',
-      password: ''
-    }
-  },
-  methods: {
-    handleLogin() {
-      // Обработка входа
-      console.log('Email:', this.email)
-      console.log('Password:', this.password)
-      // Добавьте логику аутентификации
-    }
+<script setup>
+import { useAuthStore } from '~/stores/auth';
+
+const authStore = useAuthStore();
+const author = ref('');
+const password = ref('');
+const error = ref('');
+
+const handleLogin = () => {
+  if (author.value.trim()) {
+    authStore.login({ name: author.value });
+    navigateTo('/create-post');
+  } else {
+    error.value = 'Пожалуйста, введите имя пользователя.';
   }
-}
+};
 </script>
 
 <style scoped>
