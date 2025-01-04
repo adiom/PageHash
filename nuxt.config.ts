@@ -8,13 +8,20 @@ export default defineNuxtConfig({
       SUPABASE_KEY: process.env.SUPABASE_KEY || ''
     }
   },
+  modules: [
+    '@nuxtjs/tailwindcss',
+    ['@pinia/nuxt', {
+      autoImports: ['defineStore', 'acceptHMRUpdate']
+    }]
+  ],
+  imports: {
+    dirs: ['stores']
+  },
   css: [
     'bootstrap/dist/css/bootstrap.css',
     '@/assets/css/tailwind.css',
   ],
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt'
-  ],
-  compatibilityDate: '2025-01-03'
+  nitro: {
+    preset: 'vercel'
+  }
 })
