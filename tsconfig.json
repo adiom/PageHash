@@ -4,6 +4,14 @@
   "compilerOptions": {
     "paths": {
       "~/*": ["./*"]
-    }
-  }
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
+  },
+  "include": [
+    "types/**/*.ts",
+    "types/**/*.d.ts"
+  ]
 }

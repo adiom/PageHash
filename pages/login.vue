@@ -12,19 +12,55 @@
       </div>
       <button type="submit">Войти</button>
     </form>
+    <div class="metamask-login">
+      <button @click="connectMetaMask" class="metamask-button">
+        Войти через MetaMask
+      </button>
+    </div>
     <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 
-const authStore = useAuthStore();
-const author = ref('');
-const password = ref('');
-const error = ref('');
+interface MetaMaskError {
+  code: number;
+  message: string;
+}
 
-const handleLogin = () => {
+const authStore = useAuthStore();
+const author = ref<string>('');
+const password = ref<string>('');
+const error = ref<string>('');
+
+const connectMetaMask = async (): Promise<void> => {
+  try {
+    if (typeof window.ethereum === 'undefined') {
+      error.value = 'Пожалуйста, установите MetaMask';
+      return;
+    }
+
+    const accounts: string[] = await window.ethereum.request({ 
+      method: 'eth_requestAccounts' 
+    });
+    
+    if (accounts[0]) {
+      authStore.login({ name: accounts[0] });
+      navigateTo('/create-post');
+    }
+  } catch (err) {
+    const metamaskError = err as MetaMaskError;
+    if (metamaskError.code === 4001) {
+      error.value = 'Пользователь отклонил подключение';
+    } else {
+      error.value = 'Ошибка при подключении к MetaMask';
+    }
+  }
+};
+
+const handleLogin = (): void => {
   if (author.value.trim()) {
     authStore.login({ name: author.value });
     navigateTo('/create-post');
@@ -69,5 +105,26 @@ const handleLogin = () => {
 }
 .login-page button:hover {
   background-color: #555;
+}
+.metamask-login {
+  margin-top: 1rem;
+  text-align: center;
+}
+.metamask-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #f6851b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.metamask-button:hover {
+  background-color: #e2761b;
+}
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 1rem;
 }
 </style>
