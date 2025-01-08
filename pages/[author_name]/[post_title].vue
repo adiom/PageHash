@@ -1,15 +1,15 @@
 <script setup>
-import { marked } from 'marked' // Импортируем функцию из библиотеки
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { supabase } from '@/composables/useSupabase'
+import { marked } from 'marked'
 
 const route = useRoute()
 const post = ref(null)
 
 onMounted(async () => {
   const { author_name, post_title } = route.params
-
+  
   try {
     const { data, error } = await supabase
       .from('posts')
@@ -18,14 +18,12 @@ onMounted(async () => {
       .eq('title', post_title)
       .single()
 
-    if (error) {
-      throw error
-    }
-
+    if (error) throw error
+    
     if (data) {
       post.value = {
         ...data,
-        content: marked(data.content) // Преобразуем Markdown в HTML
+        content: marked(data.content)
       }
     }
   } catch (error) {
@@ -36,13 +34,25 @@ onMounted(async () => {
 
 <template>
   <div class="container mx-auto p-8">
-    <div v-if="post">
-      <h1 class="text-4xl font-semibold text-blue-600">{{ post.title }}</h1>
-      <p class="text-2xl font-semibold text-blue-600 mb-4">{{ post.author }}</p>
-      <div v-html="post.content" class="prose prose-blue mb-4"></div> <!-- Отображаем преобразованный HTML -->
+    <div v-if="post" class="max-w-3xl mx-auto">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ post.title }}</h1>
+      <div class="flex items-center mb-6">
+        <span class="text-gray-600">Автор: 
+          <router-link 
+          :to="`/${post.author}`"
+          class="text-blue-600 hover:underline mt-4 inline-block">
+          {{ route.params.author_name }}
+        </router-link>
+        </span>
+      </div>
+      <div class="flex items-center mb-6">
+        <span class="mx-2">Date</span>
+        <span class="text-gray-600">{{ new Date(post.created_at).toLocaleDateString() }}</span>
+      </div>
+      <div v-html="post.content" class="prose prose-lg max-w-none"></div>
     </div>
-    <div v-else>
-      <p>Loading...</p>
+    <div v-else class="text-center text-gray-600">
+      Loading...
     </div>
   </div>
 </template>
