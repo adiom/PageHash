@@ -3,8 +3,8 @@
     <h1>Вход</h1>
     <form @submit.prevent="handleLogin">
       <div>
-        <label for="author">Имя пользователя:</label>
-        <input type="text" v-model="author" id="author" required />
+        <label for="username">Имя пользователя:</label>
+        <input type="text" v-model="username" id="username" required />
       </div>
       <div>
         <label for="password">Пароль:</label>
@@ -24,48 +24,42 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
-
-interface MetaMaskError {
-  code: number;
-  message: string;
-}
+import { ethers } from 'ethers';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
-const author = ref<string>('');
-const password = ref<string>('');
-const error = ref<string>('');
+const router = useRouter();
+const username = ref('');
+const password = ref('');
+const error = ref('');
 
-const connectMetaMask = async (): Promise<void> => {
+const connectMetaMask = async () => {
   try {
     if (typeof window.ethereum === 'undefined') {
       error.value = 'Пожалуйста, установите MetaMask';
       return;
     }
 
-    const accounts: string[] = await window.ethereum.request({ 
+    const accounts = await window.ethereum.request({ 
       method: 'eth_requestAccounts' 
     });
     
     if (accounts[0]) {
       authStore.login({ name: accounts[0] });
-      navigateTo('/create-post');
+      router.push('/profile');
     }
   } catch (err) {
-    const metamaskError = err as MetaMaskError;
-    if (metamaskError.code === 4001) {
-      error.value = 'Пользователь отклонил подключение';
-    } else {
-      error.value = 'Ошибка при подключении к MetaMask';
-    }
+    error.value = 'Ошибка при подключении к MetaMask';
   }
 };
 
-const handleLogin = (): void => {
-  if (author.value.trim()) {
-    authStore.login({ name: author.value });
-    navigateTo('/create-post');
+const handleLogin = async () => {
+  if (username.value.trim() && password.value.trim()) {
+    // Здесь должна быть проверка логина/пароля через API
+    authStore.login({ name: username.value });
+    router.push('/profile');
   } else {
-    error.value = 'Пожалуйста, введите имя пользователя.';
+    error.value = 'Пожалуйста, заполните все поля';
   }
 };
 </script>
