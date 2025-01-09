@@ -1,5 +1,5 @@
 <template>
-  <div class="heal-page bg-gray-100 min-h-screen flex items-center justify-center p-4">
+  <div class="heal-page min-h-screen flex justify-center p-4">
     <div class="container bg-white shadow-md rounded-lg p-6 w-full max-w-lg">
       <h1 class="text-2xl font-bold text-center text-gray-800 mb-4">Heal Up My Life ❤️</h1>
       <p class="text-sm text-gray-600 text-center mb-6">
@@ -11,12 +11,14 @@
         <div>
           <label for="text" class="block text-gray-700 font-medium mb-1">Ваш вопрос:</label>
           <textarea
-            v-model="text"
-            id="text"
-            class="textarea-field"
-            placeholder="Опишите свою проблему здесь..."
-            required
-          ></textarea>
+  v-model="text"
+  id="text"
+  class="textarea-field"
+  placeholder="Задайте ваш вопрос здесь..."
+  required
+  rows="4"
+  @input="adjustHeight($event)"
+></textarea>
         </div>
 
         <!-- Поле ввода почты -->
@@ -70,6 +72,12 @@ const generatePincode = async (): Promise<string> => {
   return pincode;
 };
 
+const adjustHeight = (event: Event) => {
+  const textarea = event.target as HTMLTextAreaElement;
+  textarea.style.height = 'auto'; // Сбрасываем высоту, чтобы пересчитать
+  textarea.style.height = `${textarea.scrollHeight}px`; // Устанавливаем высоту на основе содержимого
+};
+
 const submitForm = async () => {
   const pincode = await generatePincode();
 
@@ -113,7 +121,7 @@ const submitForm = async () => {
   border-radius: 4px;
   font-size: 14px;
   color: #4b5563;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, height 0.2s ease; /* Плавный переход */
 }
 
 .input-field:focus,
