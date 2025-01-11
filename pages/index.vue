@@ -1,67 +1,102 @@
 <template>
-  <div class="container mx-auto p-8">
-    <div class="text-center mb-10">
-      <h1 class="text-4xl font-semibold text-blue-600">Welcome to Canfly</h1>
-    </div>
+  <div id="app">
+    <!-- Фон с частицами -->
 
-    <div class="mt-12">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div v-for="post in posts" :key="post.id" class="bg-white shadow-md rounded-lg p-6">
-          <h3 class="text-xl font-bold text-gray-800">{{ post.title }}</h3>
-          <p class="text-gray-600">{{ post.author }}</p>
-          <p class="mt-2 text-gray-500">{{ post.content.slice(0, 100) }}...</p>
-          <router-link :to="`/${post.author}/${post.title}`" class="text-blue-600 hover:underline mt-4 inline-block">
-            read post..
-          </router-link>
+    <!-- Контент страницы -->
+    <div class="content">
+      <p>
+        Canfly is an innovative ecosystem that combines blockchain technology, decentralized autonomous organizations (DAO), artificial intelligence, and new standards for interaction with digital services. We are creating a space where everyone can experience the freedom of technology, secure data access, and complete control over their assets. Our solutions are powered by AI, ensuring smarter and more efficient tools for users.
+      </p>
+      <p>
+        🌐 Our website is currently under development, so stay tuned for exciting updates soon!
+      </p>
+      <!-- Ссылки на соцсети -->
+      <div class="social-icons">
+            <a href="https://github.com/yourusername" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://twitter.com/yourusername" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://facebook.com/yourusername" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://flickr.com/yourusername" target="_blank" aria-label="Flickr"><i class="fab fa-flickr"></i></a>
         </div>
-      </div>
     </div>
   </div>
 </template>
 
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import { supabase } from '@/composables/useSupabase'
-
-const title = ref('')
-const author = ref('')
-const content = ref('')
-const posts = ref([])
-
-const getPosts = async () => {
-  const { data, error } = await supabase.from('posts').select('*')
-  if (data) {
-    posts.value = data
-  } else {
-    console.error(error)
-  }
+<style scoped>
+/* Сброс стилей */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-// Функция для сохранения поста
-const savePost = async () => {
-  const postId = `${author.value}-${title.value}-${Date.now()}`
-
-  const { data, error } = await supabase.from('posts').insert([
-    {
-      title: title.value,
-      author: author.value,
-      content: content.value,
-      post_id: postId,
-    }
-  ])
-
-  if (error) {
-    console.error('Error saving post:', error.message)
-  } else {
-    alert('Пост успешно сохранён!')
-    title.value = ''
-    author.value = ''
-    content.value = ''
-    await getPosts() // Обновление списка постов
-  }
+/* Стили для тела страницы */
+body {
+  font-family: "Montserrat", sans-serif;
 }
 
-// Загрузка всех постов при монтировании компонента
-onMounted(getPosts)
-</script>
+/* Контейнер контента */
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 800px;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.content h1 {
+  font-family: "Roboto Slab", serif;
+  font-size: 3rem;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.content p {
+
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.content .signature {
+  font-size: 1rem;
+  text-align: right;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+/* Кнопки соцсетей */
+.social-icons {
+  margin-top: 20px;
+}
+
+.social-icons a {
+  color: #0095ff;
+  font-size: 1.5rem;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #ff6f61;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .content h1 {
+    font-size: 2.5rem;
+  }
+
+  .content p {
+    font-size: 1rem;
+  }
+
+  .social-icons a {
+    font-size: 1.2rem;
+    margin: 0 8px;
+  }
+}
+</style>
