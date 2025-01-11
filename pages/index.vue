@@ -40,7 +40,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 800px;
+  max-width: 1000px;
   padding: 20px;
   text-align: center;
   border-radius: 10px;
