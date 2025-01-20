@@ -46,7 +46,7 @@ const connectMetaMask = async () => {
     
     if (accounts[0]) {
       authStore.login({ name: accounts[0] });
-      router.push('/create-post');
+      router.push('/create');
     }
   } catch (err) {
     error.value = 'Ошибка при подключении к MetaMask';
@@ -57,7 +57,7 @@ const handleLogin = async () => {
   if (username.value.trim() && password.value.trim()) {
     // Здесь должна быть проверка логина/пароля через API
     authStore.login({ name: username.value });
-    router.push('/create-post');
+    router.push('/create');
   } else {
     error.value = 'Пожалуйста, заполните все поля';
   }
