@@ -5,9 +5,6 @@
     <!-- Контент страницы -->
     <div class="content">
       <p>
-        Canfly is an innovative ecosystem that combines blockchain technology, decentralized autonomous organizations (DAO), artificial intelligence, and new standards for interaction with digital services. We are creating a space where everyone can experience the freedom of technology, secure data access, and complete control over their assets. Our solutions are powered by AI, ensuring smarter and more efficient tools for users.
-      </p>
-      <p>
         🌐 Our website is currently under development, so stay tuned for exciting updates soon!
       </p>
       <!-- Ссылки на соцсети -->
